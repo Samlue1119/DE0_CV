@@ -1,0 +1,23 @@
+module testbench;
+
+
+	logic clk,rst;
+	logic [13:0]IR;
+	
+CPU a1(
+	.clk(clk),
+	.rst(rst),
+	.IR(IR)
+	);
+
+	always begin
+		#5 clk = ~clk;
+	end
+	
+	initial begin
+		clk = 0;
+		rst = 1;
+		#10 rst = 0;
+		#1000 $stop;
+	end
+endmodule

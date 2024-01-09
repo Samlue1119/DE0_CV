@@ -1,0 +1,114 @@
+# Reading C:/circut_design/modelsim_ase/tcl/vsim/pref.tcl
+# do DE0_CV_run_msim_rtl_verilog.do
+# if {[file exists rtl_work]} {
+# 	vdel -lib rtl_work -all
+# }
+# vlib rtl_work
+# vmap work rtl_work
+# Model Technology ModelSim - Intel FPGA Edition vmap 10.5b Lib Mapping Utility 2016.10 Oct  5 2016
+# vmap work rtl_work 
+# Copying C:/circut_design/modelsim_ase/win32aloem/../modelsim.ini to modelsim.ini
+# Modifying modelsim.ini
+# 
+# vlog -sv -work work +incdir+C:/circut_design/01057024_DEMO11/DE0_CV/design {C:/circut_design/01057024_DEMO11/DE0_CV/design/stack.sv}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 20:51:55 on Jan 06,2024
+# vlog -reportprogress 300 -sv -work work "+incdir+C:/circut_design/01057024_DEMO11/DE0_CV/design" C:/circut_design/01057024_DEMO11/DE0_CV/design/stack.sv 
+# -- Compiling module stack
+# 
+# Top level modules:
+# 	stack
+# End time: 20:51:55 on Jan 06,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -sv -work work +incdir+C:/circut_design/01057024_DEMO11/DE0_CV/design {C:/circut_design/01057024_DEMO11/DE0_CV/design/single_port_ram_128x8.sv}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 20:51:55 on Jan 06,2024
+# vlog -reportprogress 300 -sv -work work "+incdir+C:/circut_design/01057024_DEMO11/DE0_CV/design" C:/circut_design/01057024_DEMO11/DE0_CV/design/single_port_ram_128x8.sv 
+# -- Compiling module single_port_ram_128x8
+# 
+# Top level modules:
+# 	single_port_ram_128x8
+# End time: 20:51:55 on Jan 06,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -sv -work work +incdir+C:/circut_design/01057024_DEMO11/DE0_CV/design {C:/circut_design/01057024_DEMO11/DE0_CV/design/Program_Rom.sv}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 20:51:55 on Jan 06,2024
+# vlog -reportprogress 300 -sv -work work "+incdir+C:/circut_design/01057024_DEMO11/DE0_CV/design" C:/circut_design/01057024_DEMO11/DE0_CV/design/Program_Rom.sv 
+# -- Compiling module Program_Rom
+# 
+# Top level modules:
+# 	Program_Rom
+# End time: 20:51:55 on Jan 06,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -sv -work work +incdir+C:/circut_design/01057024_DEMO11/DE0_CV/design {C:/circut_design/01057024_DEMO11/DE0_CV/design/CPU.sv}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 20:51:55 on Jan 06,2024
+# vlog -reportprogress 300 -sv -work work "+incdir+C:/circut_design/01057024_DEMO11/DE0_CV/design" C:/circut_design/01057024_DEMO11/DE0_CV/design/CPU.sv 
+# -- Compiling module CPU
+# 
+# Top level modules:
+# 	CPU
+# End time: 20:51:55 on Jan 06,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# 
+do compile.do
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 20:51:59 on Jan 06,2024
+# vlog -reportprogress 300 ../tb/testbench.sv 
+# -- Compiling module testbench
+# 
+# Top level modules:
+# 	testbench
+# End time: 20:51:59 on Jan 06,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 20:51:59 on Jan 06,2024
+# vlog -reportprogress 300 ../../design/CPU.sv 
+# -- Compiling module CPU
+# 
+# Top level modules:
+# 	CPU
+# End time: 20:52:00 on Jan 06,2024, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 20:52:00 on Jan 06,2024
+# vlog -reportprogress 300 ../../design/single_port_ram_128x8.sv 
+# -- Compiling module single_port_ram_128x8
+# 
+# Top level modules:
+# 	single_port_ram_128x8
+# End time: 20:52:00 on Jan 06,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 20:52:00 on Jan 06,2024
+# vlog -reportprogress 300 ../../design/DE0_CV.sv 
+# -- Compiling module DE0_CV
+# 
+# Top level modules:
+# 	DE0_CV
+# End time: 20:52:00 on Jan 06,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 20:52:00 on Jan 06,2024
+# vlog -reportprogress 300 ../../design/Program_Rom.sv 
+# -- Compiling module Program_Rom
+# 
+# Top level modules:
+# 	Program_Rom
+# End time: 20:52:00 on Jan 06,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+do sim.do
+# vsim -voptargs="+acc" work.testbench 
+# Start time: 20:52:01 on Jan 06,2024
+# Loading sv_std.std
+# Loading work.testbench
+# Loading work.CPU
+# Loading work.Program_Rom
+# Loading work.single_port_ram_128x8
+# Loading work.stack
+# .main_pane.structure.interior.cs.body.struct .main_pane.wave.interior.cs.body.pw.wf .main_pane.objects.interior.cs.body.tree
+# ** Note: $stop    : ../tb/testbench.sv(21)
+#    Time: 1010 ps  Iteration: 0  Instance: /testbench
+# Break in Module testbench at ../tb/testbench.sv line 21
+# End time: 20:52:28 on Jan 06,2024, Elapsed time: 0:00:27
+# Errors: 0, Warnings: 0

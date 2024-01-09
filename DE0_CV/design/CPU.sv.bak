@@ -1,0 +1,235 @@
+module CPU(
+	input logic clk,
+	input logic rst,
+	output logic [7:0]w_q
+	);
+	
+	logic [10:0]pc_q,pc_next,mar_q;
+	logic [13:0]prog_data,ir_q;
+	logic ram_en, sel_pc, sel_alu, load_pc,load_mar,load_ir,load_w;
+	logic [3:0]ps,ns,op;
+	logic [7:0]alu_q,mux1_out,opcode,oprand,ram_out;
+	
+	
+	//PC
+	always_comb
+	begin	
+		if(sel_pc) 	pc_next = pc_q + 1;
+		else			pc_next = ir_q[10:0];
+	end
+	
+	always_ff @(posedge clk or posedge rst)
+	begin
+		if(rst)			pc_q <= #1 0;
+		else if (load_pc) 	pc_q <= #1 pc_next;
+	end
+	
+	//MAR
+	always_ff @(posedge clk or posedge rst)
+	begin
+		if(rst)					mar_q <= #1 0;
+		else if(load_mar) 	mar_q <= #1 pc_q;
+	end
+	
+	//ROM
+	Program_Rom ROM1(
+		.Rom_data_out(prog_data), 
+		.Rom_addr_in(mar_q)
+	);
+	
+	//IR
+	always_ff @(posedge clk or posedge rst)
+	begin
+		if(rst)				ir_q <= #1 0;
+		else if (load_ir)	ir_q <= #1 prog_data;
+	end
+	
+	//OPCODE
+	assign MOVLW = ir_q[13:8] == 6'h30;
+	assign ADDWF = ir_q[13:8] == 6'b00_0111;
+	assign IORLW = ir_q[13:8] == 6'h38;
+	assign ANDWF = ir_q[13:8] == 6'b00_0101;
+	assign SUBLW = ir_q[13:8] == 6'h3c;
+	assign XORLW = ir_q[13:8] == 6'h3a;
+	assign CLRF  = ir_q[13:7] == 7'b00_0001_1;
+	assign CLRW  = ir_q[13:2] == 12'b00_0001_0000_00;
+	assign COMF  = ir_q[13:8] == 6'b00_1001;
+	assign DECF  = ir_q[13:8] == 6'b00_0011;
+	assign GOTO  = ir_q[13:11] == 3'b10_1;
+	
+	//RAM
+	single_port_ram_128x8 RAM1(
+		.data(alu_q), 
+		.addr(ir_q[13:7]),
+		.ram_en(ram_en),
+		.clk(clk),
+		.q(ram_out)
+	);
+
+	always_comb
+	begin
+		if(~sel_alu)	mux1_out = #1 ir_q[13:6];
+		else				mux1_out = #1 ram_out;
+	end
+
+	//ALU	
+	
+	always_ff @(posedge clk or posedge rst)
+	begin
+		if(rst)				w_q <= #1 0;
+		else if (load_w)	w_q <= #1 alu_q;
+	end
+	
+	always_comb
+	begin	
+		case(op)
+			0:alu_q = mux1_out + w_q;
+			1:alu_q = mux1_out - w_q;
+			2:alu_q = mux1_out & w_q;
+			3:alu_q = mux1_out | w_q;
+			4:alu_q = mux1_out ^ w_q;
+			5:alu_q = mux1_out;
+			6:alu_q = mux1_out + 1;
+			7:alu_q = mux1_out - 1;
+			8:alu_q = 0;
+			9:alu_q = ~mux1_out;
+			default alu_q = mux1_out + w_q;
+		endcase 
+	end
+	
+	//state
+	typedef enum logic [3:0]{
+		T0,T1,T2,T3,T4,T5,T6
+	}state_t;
+
+	always_ff @(posedge clk or posedge rst)
+	begin
+		if(rst)			ps <= #1 0;
+		else			 	ps <= #1 ns;
+	end
+	
+	assign d = ir_q[7];
+	
+	always_comb
+	begin
+		load_mar = 0;
+		load_ir = 0;
+		load_pc = 0;
+		load_w = 0;
+		op = 0;
+		ns = 0;
+		sel_pc = 0;
+		
+		case(ps)
+			T0:
+			begin
+				ns		=	T1;
+			end
+			T1:
+			begin
+				load_mar = 1;
+				ns		=	T2;
+			end
+			T2:
+			begin
+				sel_pc  = 0;
+				load_pc = 1;
+				ns		=	T3;
+			end
+			T3:
+			begin
+				load_ir = 1;
+				ns		=	T4;
+			end
+			T4:
+			begin
+				load_w = 1;
+				if(ADDWF)
+					begin
+						op = 0;
+						sel_alu = 1;
+						if(d)	load_w = 1;
+						else 	ram_en = 1;
+					end
+				else if(SUBLW)
+					begin
+						op = 1;
+						sel_alu = 1;
+						if(d)	load_w = 1;
+						else 	ram_en = 1;
+					end
+				else if(ANDWF) 
+					begin
+						op = 2;
+						sel_alu = 1;
+						if(d)	load_w = 1;
+						else 	ram_en = 1;
+					end
+				else if(IORLW) 
+					begin
+						op = 3;
+						sel_alu = 1;
+						if(d)	load_w = 1;
+						else 	ram_en = 1;
+					end
+				else if(XORLW)
+					begin
+						op = 4;
+						sel_alu = 1;
+						if(d)	load_w = 1;
+						else 	ram_en = 1;
+					end
+				else if(MOVLW)
+					begin
+						op = 5;
+						sel_alu = 1;
+						if(d)	load_w = 1;
+						else 	ram_en = 1;
+					end
+				else if(COMF ) 
+					begin
+						op = 6;
+						sel_alu = 1;
+						ram_en = 1;
+					end
+				else if(DECF ) 
+					begin
+						op = 7;
+						sel_alu = 1;
+						ram_en = 1;
+					end
+				else if(CLRF )
+					begin
+						op = 8;
+						ram_en = 1;
+					end
+				else if(CLRW )
+					begin
+						op = 8;
+						load_w = 1;
+					end
+				else if(COMF )
+					begin
+						op = 9;
+						sel_alu = 1;
+						ram_en = 1;
+					end
+				else if(GOTO )
+					begin
+						sel_pc = 1;
+						load_pc = 1;
+					end
+				ns		=	T5;
+			end
+			T5:
+			begin
+				ns		=	T6;
+			end
+			T6:
+			begin
+				ns		=	T1;
+			end
+		endcase
+	end
+	
+endmodule
